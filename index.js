@@ -14,3 +14,6 @@ const divide = function(a, b) {
     return a / b;
 }
 
+const operate = function(operator, num1, num2) {
+    return operator(num1 ,num2)
+}
