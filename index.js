@@ -1,3 +1,4 @@
+//Basic calculator operation functions
 const add = function(a, b) {
 	return a + b;
 };
