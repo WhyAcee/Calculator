@@ -1,7 +1,7 @@
 const numbers = document.querySelectorAll('.numbers')
 const display = document.querySelector('.screen span')
 const signs = document.querySelectorAll('.signs')
-const equals = document.querySelector('equal')
+const equals = document.querySelector('.equals')
 
 let firstNum = "";
 let isFirstNum = false;
@@ -43,13 +43,29 @@ function getSign() {
     for(let i = 0; i < signs.length; i++) {
         signs[i].addEventListener('click', (e) =>{
             sign = e.target.getAttribute('value');
-            isFirstNum = true;
-            console.log(sign)        
+            isFirstNum = true;       
         })
     }
 
 }
 getSign();
+
+//Event listener for equals sign
+equals.addEventListener('click', (e) => {
+    if(sign === '+') {
+        displayValue = operate(add, firstNum, secondNum);
+    }
+    else if(sign === '-') {
+        displayValue = operate(subtract, firstNum, secondNum);
+    }
+    else if(sign === '*') {
+        displayValue = operate(multiply, firstNum, secondNum);
+    }
+    else if(sign === '/') {
+        displayValue = operate(divide, firstNum, secondNum);
+    }
+    display.innerHTML = displayValue;
+})
 
 //Basic calculator operation functions
 const add = function(a, b) {
@@ -60,8 +76,8 @@ const subtract = function(a, b) {
 	return a - b;
 };
 
-const multiply = function(array) {
-    return array.reduce((total, current) => (total * current), 1);
+const multiply = function(a, b) {
+    return a * b;
   };
 
 const divide = function(a, b) {
