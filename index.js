@@ -13,9 +13,6 @@ let secondNum = "";
 let isSecondNum = false;
 let displayValue = 0;
 
-/* console.log(document.querySelector('.screen span').style.fontSize) */
-
-
 //Event Listeners for number buttons
 for(let i = 0; i < numbers.length; i++) {
     numbers[i].addEventListener('click', (e) => {
@@ -26,24 +23,26 @@ for(let i = 0; i < numbers.length; i++) {
         if(isSecondNum === false) {
             getSecondNum(numValue)
         }
-        if (display.innerHTML.length >= 7) {
-            document.querySelector('.screen span').style.fontSize = `${650 / display.innerHTML.length}px`;
+        if (display.textContent.length >= 7) {
+            document.querySelector('.screen span').style.fontSize = `${650 / display.textContent.length}px`;
         } 
     })
 }
+
+// Finds input values
 function getFirstNum(num) {
-    display.innerHTML = "";
+    display.textContent = "";
     firstNum += num;
-    display.innerHTML = firstNum;
+    display.textContent = firstNum;
     firstNum = +firstNum;
 }
 
 function getSecondNum(num) {
     if(isFirstNum === true) { 
         document.querySelector('.screen span').style.fontSize = "100px"
-        display.innerHTML = "";
+        display.textContent = "";
         secondNum += num;
-        display.innerHTML = secondNum;
+        display.textContent = secondNum;
         secondNum = +secondNum;
     }
 }
@@ -53,42 +52,46 @@ function getSign() {
     for(let i = 0; i < signs.length; i++) {
         signs[i].addEventListener('click', (e) =>{
             sign = e.target.getAttribute('value');
-            isFirstNum = true;      
+            isFirstNum = true;   
+            isSecondNum = false;
+            if(secondNum != '') {
+                secondNum = true;
+                evaluate();
+            }
         })
     }
 
 }
 getSign();
 
-// Event listener for equals sign
+// Equals button functionality
 equals.addEventListener('click', (e) => {
-    if(secondNum != '') {
-        if(sign === '+') {
-            displayValue = operate(add, firstNum, secondNum);
-        }
-        else if(sign === '-') {
-            displayValue = operate(subtract, firstNum, secondNum);
-        }
-        else if(sign === '*') {
-            displayValue = operate(multiply, firstNum, secondNum);
-        }
-        else if(sign === '/') {
-            displayValue = operate(divide, firstNum, secondNum);
-        }
-        display.innerHTML = displayValue;
-        firstNum = displayValue
-        secondNum = '';
+    evaluate();
+})
 
-        if (display.innerHTML.length >= 7) {
-            document.querySelector('.screen span').style.fontSize = `${650 / display.innerHTML.length}px`;
-        }
+function evaluate() {
+    if(sign === '+') {
+        displayValue = operate(add, firstNum, secondNum);
     }
-})
+    else if(sign === '-') {
+        displayValue = operate(subtract, firstNum, secondNum);
+    }
+    else if(sign === '*') {
+        displayValue = operate(multiply, firstNum, secondNum);
+    }
+    else if(sign === '/') {
+        displayValue = operate(divide, firstNum, secondNum);
+    }
+    display.textContent = displayValue;
+    firstNum = displayValue
+    secondNum = '';
 
-// Clear Button
-clearBtn.addEventListener('click', (e) => {
-    clear();
-})
+    if (display.textContent.length >= 7) {
+        document.querySelector('.screen span').style.fontSize = `${650 / display.textContent.length}px`;
+    }
+}
+// Clear Button functionality
+clearBtn.addEventListener('click', clear)
 
 function clear() {
     firstNum = "";
@@ -97,8 +100,29 @@ function clear() {
     secondNum = "";
     isSecondNum = false;
     displayValue = 0;
-    display.innerHTML = displayValue;
+    display.textContent = displayValue;
     document.querySelector('.screen span').style.fontSize = "100px"
+}
+
+// Delete button functionality
+deleteBtn.addEventListener('click', deleteNum)
+
+function deleteNum() {
+    if(display.textContent != 0) {
+        display.textContent = display.textContent.toString().slice(0, -1);
+        if(isFirstNum == true) {
+            secondNum = display.textContent;
+            secondNum = +secondNum;
+        } else if(isFirstNum == false) {
+            firstNum = display.textContent;
+            firstNum = +firstNum;
+        }
+        if(isSecondNum == true) {
+            clear()
+        }
+        console.log(display.textContent)
+        console.log(firstNum)
+    }
 }
 
 // Basic calculator operation functions
@@ -119,7 +143,9 @@ const divide = function(a, b) {
 }
 
 const operate = function(operator, num1, num2) {
+    isSecondNum = true;
     return operator(num1 ,num2)
 }
 
-
+// Fix chaining operations
+// Add decimal functionality 
