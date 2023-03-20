@@ -48,8 +48,8 @@ span {
 button {
     border-radius: 100%;
     border-width: 0px;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     margin: 0px 1px 30px 1px;
     background-color: #505050;
     color: white;
@@ -64,7 +64,6 @@ button:hover {
     width: 125px;
     background-color: #D4D4D2;
     color: black;
-    margin: right px;
 }
 
 #divide {
