@@ -47,17 +47,36 @@ function getSecondNum(num) {
     }
 }
 
+// 2 + 4
+// firstNum = 2 then + sign (calls getSign()) then secondNum = 4
+// 2 + 4 + =>  6 +
+// when we call + => getSign()
+// secondNum > null / ' '
+
 // Event Listeners for operators
 function getSign() {
     for(let i = 0; i < signs.length; i++) {
         signs[i].addEventListener('click', (e) =>{
-            sign = e.target.getAttribute('value');
+            
+        if(secondNum != '') { // second operator
+            evaluate()
+            display.textContent = displayValue;
+            firstNum = displayValue
+            isSecondNum = false;
+            secondNum = '';
+            console.log("I did my job")
+        }
+        else // for first operator
+        {
             isFirstNum = true;   
             isSecondNum = false;
-            if(secondNum != '') {
-                secondNum = true;
-                evaluate();
-            }
+            secondNum = '';
+        }
+        sign = e.target.getAttribute('value');
+        console.log(isSecondNum)
+        console.log(secondNum)
+        console.log(displayValue)
+        console.log(firstNum)
         })
     }
 
@@ -67,6 +86,9 @@ getSign();
 // Equals button functionality
 equals.addEventListener('click', (e) => {
     evaluate();
+    display.textContent = displayValue;
+    firstNum = displayValue
+    firstNum = +firstNum;
 })
 
 function evaluate() {
@@ -80,11 +102,9 @@ function evaluate() {
         displayValue = operate(multiply, firstNum, secondNum);
     }
     else if(sign === '/') {
-        displayValue = operate(divide, firstNum, secondNum);
+         displayValue = operate(divide, firstNum, secondNum);
     }
-    display.textContent = displayValue;
-    firstNum = displayValue
-    secondNum = '';
+
 
     if (display.textContent.length >= 7) {
         document.querySelector('.screen span').style.fontSize = `${650 / display.textContent.length}px`;
@@ -110,6 +130,7 @@ deleteBtn.addEventListener('click', deleteNum)
 function deleteNum() {
     if(display.textContent != 0) {
         display.textContent = display.textContent.toString().slice(0, -1);
+        display.value = display.textContent
         if(isFirstNum == true) {
             secondNum = display.textContent;
             secondNum = +secondNum;
@@ -120,8 +141,6 @@ function deleteNum() {
         if(isSecondNum == true) {
             clear()
         }
-        console.log(display.textContent)
-        console.log(firstNum)
     }
 }
 
