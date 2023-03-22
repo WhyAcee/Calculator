@@ -5,6 +5,7 @@ const signs = document.querySelectorAll('.signs')
 const equals = document.querySelector('.equals')
 const clearBtn = document.querySelector('#clear')
 const deleteBtn = document.querySelector('#delete')
+const decimal = document.querySelector('#decimal')
 
 let firstNum = "";
 let isFirstNum = false;
@@ -19,14 +20,14 @@ for(let i = 0; i < numbers.length; i++) {
     numbers[i].addEventListener('click', (e) => {
         let numValue = e.target.getAttribute('value');
         if(isFirstNum === false) {
-            getFirstNum(numValue)
+            getFirstNum(numValue)  
         }
         if(isSecondNum === false) {
             getSecondNum(numValue)
         }
         if (display.textContent.length >= 7) {
             document.querySelector('.screen span').style.fontSize = `${650 / display.textContent.length}px`;
-        } 
+        }
     })
 }
 
@@ -38,10 +39,11 @@ function getFirstNum(num) {
         secondNum = "";
         isCalculated = false;
     }
+
+    if(num)
     display.textContent = "";
     firstNum += num;
     display.textContent = firstNum;
-    firstNum = +firstNum;
 }
 
 function getSecondNum(num) {
@@ -50,7 +52,6 @@ function getSecondNum(num) {
         display.textContent = "";
         secondNum += num;
         display.textContent = secondNum;
-        secondNum = +secondNum;
     }
 }
 
@@ -64,13 +65,14 @@ function getSecondNum(num) {
 function getSign() {
     for(let i = 0; i < signs.length; i++) {
         signs[i].addEventListener('click', (e) =>{
+        decimal.removeAttribute('disabled')
 
         if(isCalculated)
         {
             secondNum = "";
             isCalculated = false;
         }
-            
+      
         if(secondNum != '') { // second operator
             evaluate()
             isSecondNum = false;
@@ -102,6 +104,10 @@ equals.addEventListener('click', (e) => {
 })
 
 function evaluate() {
+    firstNum = +firstNum
+    secondNum = +secondNum
+    decimal.removeAttribute('disabled')
+
     if(sign === '+') {
         displayValue = operate(add, firstNum, secondNum);
     }
@@ -127,6 +133,7 @@ function evaluate() {
 clearBtn.addEventListener('click', clear)
 
 function clear() {
+    decimal.removeAttribute('disabled')
     isCalculated = false;
     firstNum = "";
     isFirstNum = false;
@@ -143,6 +150,13 @@ function equalClear() {
     isFirstNum = false;
     isSecondNum = false;
 }
+
+
+
+// Check if there is a decimal
+decimal.addEventListener('click', () => {
+    decimal.setAttribute("disabled","disabled");
+})
 
 // Delete button functionality
 deleteBtn.addEventListener('click', deleteNum)
@@ -191,6 +205,3 @@ const divide = function(a, b) {
 const operate = function(operator, num1, num2) {
     return operator(num1 ,num2)
 }
-
-// Add decimal functionality 
-// Display a snarky error message if the user tries to divide by 0
