@@ -12,6 +12,7 @@ let sign = "";
 let secondNum = "";
 let isSecondNum = false;
 let displayValue = 0;
+let isCalculated = false;
 
 //Event Listeners for number buttons
 for(let i = 0; i < numbers.length; i++) {
@@ -31,6 +32,12 @@ for(let i = 0; i < numbers.length; i++) {
 
 // Finds input values
 function getFirstNum(num) {
+    if(isCalculated)
+    {
+        firstNum = "";
+        secondNum = "";
+        isCalculated = false;
+    }
     display.textContent = "";
     firstNum += num;
     display.textContent = firstNum;
@@ -57,11 +64,15 @@ function getSecondNum(num) {
 function getSign() {
     for(let i = 0; i < signs.length; i++) {
         signs[i].addEventListener('click', (e) =>{
+
+        if(isCalculated)
+        {
+            secondNum = "";
+            isCalculated = false;
+        }
             
         if(secondNum != '') { // second operator
             evaluate()
-            display.textContent = displayValue;
-            firstNum = displayValue
             isSecondNum = false;
             secondNum = '';
             console.log("I did my job")
@@ -86,9 +97,8 @@ getSign();
 // Equals button functionality
 equals.addEventListener('click', (e) => {
     evaluate();
-    display.textContent = displayValue;
-    firstNum = displayValue
-    firstNum = +firstNum;
+    equalClear();
+    
 })
 
 function evaluate() {
@@ -105,15 +115,19 @@ function evaluate() {
          displayValue = operate(divide, firstNum, secondNum);
     }
 
-
+    display.textContent = displayValue;
+    firstNum = displayValue
+    firstNum = +firstNum;
+    
     if (display.textContent.length >= 7) {
         document.querySelector('.screen span').style.fontSize = `${650 / display.textContent.length}px`;
-    }
+    } 
 }
 // Clear Button functionality
 clearBtn.addEventListener('click', clear)
 
 function clear() {
+    isCalculated = false;
     firstNum = "";
     isFirstNum = false;
     sign = "";
@@ -122,6 +136,12 @@ function clear() {
     displayValue = 0;
     display.textContent = displayValue;
     document.querySelector('.screen span').style.fontSize = "100px"
+}
+
+function equalClear() { 
+    isCalculated = true;
+    isFirstNum = false;
+    isSecondNum = false;
 }
 
 // Delete button functionality
@@ -158,13 +178,19 @@ const multiply = function(a, b) {
   };
 
 const divide = function(a, b) {
+    if(b === 0) 
+    {
+    return display.textContent = "Error"
+    }
+    else 
+    {
     return a / b;
+    }
 }
 
 const operate = function(operator, num1, num2) {
-    isSecondNum = true;
     return operator(num1 ,num2)
 }
 
-// Fix chaining operations
 // Add decimal functionality 
+// Display a snarky error message if the user tries to divide by 0
